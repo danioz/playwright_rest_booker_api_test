@@ -11,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI
     ? [['github'], ['list'], ['html'], ['@currents/playwright']]
-    : [['list', { printSteps: true }], ['html']],
+    : [['list', { printSteps: true }]],
   use: {
     extraHTTPHeaders: {
       'playwright-solutions': 'true',
