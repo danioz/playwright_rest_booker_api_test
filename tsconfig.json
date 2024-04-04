@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@datafactory/*": ["lib/datafactory/*"],
+      "@helpers/*": ["lib/helpers/*"]
+    }
+  }
+}
