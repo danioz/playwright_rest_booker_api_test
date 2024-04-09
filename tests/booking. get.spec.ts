@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { Summary, BookingDates, CreatedBooking } from '@helpers/booking/booking-model';
+import { Booking } from '@helpers/booking/booking-model';
 import { ErrorResponse, Error } from '@helpers/error-model';
 import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/headers';
 
@@ -11,30 +11,49 @@ test.beforeAll(async () => {
   invalidHeaders = await createInvalidHeaders();
 });
 
-test('GET booking summary for a room', async ({ request }) => {
+test('GET all bookings', async ({ request }) => {
   //Act
-  const response = await request.get('booking/summary', { params: { roomid: 1 } });
+  const response = await request.get('/booking');
 
   //Assert
   expect(response.status()).toBe(200);
 
-  const summaryBody: Summary = await response.json();
-  expect(summaryBody.bookings.length).toBeGreaterThanOrEqual(1);
+  const body = await response.json();
+  expect(body.length).toBeGreaterThan(0);
 
-  summaryBody.bookings.forEach((booking) => {
-    expect(Date.parse(booking.bookingDates.checkin)).toBeLessThan(Date.parse(booking.bookingDates.checkout));
-  });
+  // body.bookings.forEach((booking) => {
+  // expect(Date.parse(booking.bookingDates.checkin)).toBeLessThan(Date.parse(booking.bookingDates.checkout));
+  // });
 });
 
-test('GET booking summary for a non-existing room', async ({ request }) => {
+test('GET booking for specific booking based upon the booking id provided', async ({ request }) => {
+  // todo: dynamic booking data so no need to hardcode the expected booking
+  
+  
+  // //Arrange
+  // const expectedBooking: Booking = {
+  //   firstname: 'Sally',
+  //   lastname: 'Ericsson',
+  //   totalprice: 299,
+  //   depositpaid: true,
+  //   bookingdates: {
+  //     checkin: '2019-08-16',
+  //     checkout: '2023-08-27',
+  //   },
+  //   additionalneeds: 'Breakfast',
+  // };
+
   //Act
-  const response = await request.get('booking/summary', { params: { roomid: 999999 } });
+  const response = await request.get('booking/1');
 
   //Assert
   expect(response.status()).toBe(200);
 
-  const summaryBody: Summary = await response.json();
-  expect(summaryBody.bookings.length).toBe(0);
+  const body: Booking = await response.json();
+  // expect(body).toEqual(expect.objectContaining(expectedBooking));
+  expect(Date.parse(body.bookingdates.checkin)).toBeLessThan(Date.parse(body.bookingdates.checkout));
+  
+  console.log(body);
 });
 
 test('GET booking summary with None roomid', async ({ request }) => {
@@ -73,14 +92,22 @@ test('GET booking summary without roomid', async ({ request }) => {
   expect(errorBody).toEqual(expect.objectContaining(expectedError));
 });
 
+// test('GET all bookings', async ({ request }) => {
+//   //Act
+//   const response = await request.get('booking/', { headers: validHeaders });
+
+//   //Assert
+//   expect(response.status()).toBe(200);
+
+//   console.log(response);
+// });
+
 test('GET all bookings without authentication', async ({ request }) => {
   //Act
   const response = await request.get('booking/');
 
   //Assert
   expect(response.status()).toBe(403);
-
-  console.log(response);
 });
 
 test('GET booking details without authentication', async ({ request }) => {

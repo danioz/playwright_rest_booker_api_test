@@ -1,22 +1,13 @@
-import { expect, request } from '@playwright/test';
+import { APIRequestContext, APIResponse, expect, request } from '@playwright/test';
 
 export type RequestHeaders = {
   cookie: string;
 };
 
-export async function createHeaders(): Promise<RequestHeaders> {
-  const contextRequest = await request.newContext();
-  const response = await contextRequest.post('auth/login', {
-    data: {
-      username: process.env.USERNAME,
-      password: process.env.PASSWORD,
-    },
-  });
 
-  expect(response.status()).toBe(200);
-  const headers = response.headers();
-  const tokenString = headers['set-cookie'].split(':')[0];
-  const token = tokenString.split('=')[1];
+
+export async function createHeaders(): Promise<RequestHeaders> {
+  const token = await createToken();
 
   return {
     cookie: `cookie=${token}`,
@@ -27,4 +18,22 @@ export async function createInvalidHeaders(): Promise<RequestHeaders> {
   return {
     cookie: 'cookie=invalid',
   };
+}
+
+type TokenResponse = {
+  token: string;
+};
+
+async function createToken(): Promise<string> {
+  const contextRequest = await request.newContext();
+  const response = await contextRequest.post('auth', {
+    data: {
+      username: process.env.USERNAME,
+      password: process.env.PASSWORD,
+    },
+  });
+
+  expect(response.status()).toBe(200);
+  const body: TokenResponse = await response.json();
+  return body.token;
 }
