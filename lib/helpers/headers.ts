@@ -4,8 +4,6 @@ export type RequestHeaders = {
   cookie: string;
 };
 
-
-
 export async function createHeaders(): Promise<RequestHeaders> {
   const token = await createToken();
 
@@ -25,8 +23,8 @@ type TokenResponse = {
 };
 
 async function createToken(): Promise<string> {
-  const contextRequest = await request.newContext();
-  const response = await contextRequest.post('auth', {
+  const contextRequest: APIRequestContext = await request.newContext();
+  const response: APIResponse = await contextRequest.post('auth', {
     data: {
       username: process.env.USERNAME,
       password: process.env.PASSWORD,
