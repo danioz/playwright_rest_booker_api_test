@@ -21,8 +21,8 @@ export default defineConfig({
     trace: 'on', // 'retain-on-failure'
   },
   projects: [
-    {name: 'setup', testMatch: /auth.setup.ts/, teardown:'teardown'},
-    {name: 'booking', dependencies:['setup']},
-    {name: 'teardown', testMatch: /teardown.ts/},
-  ]
+    { name: 'setup', testMatch: /auth.setup.ts/, teardown: 'teardown' },
+    { name: 'booking', dependencies: ['setup'] },
+    { name: 'teardown', testMatch: /teardown.ts/ },
+  ],
 });
