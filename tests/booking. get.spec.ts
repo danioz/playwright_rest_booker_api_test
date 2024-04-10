@@ -28,8 +28,7 @@ test('GET all bookings', async ({ request }) => {
 
 test('GET booking for specific booking based upon the booking id provided', async ({ request }) => {
   // todo: dynamic booking data so no need to hardcode the expected booking
-  
-  
+
   // //Arrange
   // const expectedBooking: Booking = {
   //   firstname: 'Sally',
@@ -52,7 +51,7 @@ test('GET booking for specific booking based upon the booking id provided', asyn
   const body: Booking = await response.json();
   // expect(body).toEqual(expect.objectContaining(expectedBooking));
   expect(Date.parse(body.bookingdates.checkin)).toBeLessThan(Date.parse(body.bookingdates.checkout));
-  
+
   console.log(body);
 });
 
