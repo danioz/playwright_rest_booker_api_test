@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "docker-build": "docker  build -t booking -f Dockerfile .",
+    "docker-run": "docker run --rm booking npx playwright test",
     "show-report": "npx playwright show-report",
+    "booking tests": "npx playwright test --project booking",
     "tests": "npx playwright test",
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write"
