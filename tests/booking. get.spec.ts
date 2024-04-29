@@ -21,9 +21,8 @@ test.describe('GET /booking', () => {
     //Act
     const response = await bookingResponse.getBookings();
     //Assert
-    expect(response.status()).toBe(200);
-
-    const body: Booking[] = await response.json();
+    expect(response.response.status()).toBe(200);
+    const body: Booking[] = response.responseBody;
     expect(body.length).toBeGreaterThan(0);
   });
 
@@ -32,9 +31,8 @@ test.describe('GET /booking', () => {
     const response = await bookingResponse.getBookingById(1);
 
     //Assert
-    expect(response.status()).toBe(200);
-
-    const body: Booking = await response.json();
+    expect(response.response.status()).toBe(200);
+    const body: Booking = response.responseBody;
     expect(Date.parse(body.bookingdates.checkin)).toBeLessThan(Date.parse(body.bookingdates.checkout));
   });
 
@@ -43,8 +41,7 @@ test.describe('GET /booking', () => {
     const response = await bookingResponse.getBookingById(99999);
 
     //Assert
-    expect(response.status()).toBe(404);
-    const body = await response.text();
-    expect(body).toBe('Not Found');
+    expect(response.response.status()).toBe(404);
+    expect(response.responseBody).toBe('Not Found');
   });
 });
