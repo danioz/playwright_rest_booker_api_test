@@ -8,7 +8,7 @@ export class BookingClient {
     return this.clientInstance;
   }
 
-  private initialize = async () => {
+  private initialize = async (): Promise<APIRequestContext> => {
     return await request.newContext();
   };
 }

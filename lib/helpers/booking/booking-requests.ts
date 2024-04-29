@@ -3,7 +3,7 @@ import { BookingClient } from './booking-client';
 import { Booking } from '@helpers/booking/booking-model';
 
 export class BookingRequests {
-  async getBookings(): Promise<any> {
+  async getBookings() {
     const client = await new BookingClient().getClient();
     const response = await client.get('/booking');
     const responseBody = await getResponseBody(response);
@@ -20,7 +20,7 @@ export class BookingRequests {
   }
 }
 
-const getResponseBody = async (response: APIResponse): Promise<any> => {
+const getResponseBody = async (response: APIResponse) => {
   let responseBody = await response.text();
   if (responseBody) {
     try {
