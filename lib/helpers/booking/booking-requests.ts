@@ -1,16 +1,16 @@
 import { APIResponse } from '@playwright/test';
 import { BookingClient } from './booking-client';
+import { Booking } from '@helpers/booking/booking-model';
 
 export class BookingRequests {
-  private static client: BookingClient = new BookingClient();
 
-  static async getBookings(): Promise<APIResponse> {
-    const client = await this.client.getClient();
+  async getBookings(): Promise<APIResponse> {
+    const client = await new BookingClient().getClient();
     return await client.get('/booking');
   }
 
-  static async getBookingById(bookingId: number): Promise<APIResponse> {
-    const client = await this.client.getClient();
+  async getBookingById(bookingId: number): Promise<APIResponse> {
+    const client = await new BookingClient().getClient();
     return await client.get(`/booking/${bookingId}`);
   }
 }

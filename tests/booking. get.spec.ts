@@ -5,6 +5,7 @@ import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/he
 
 let validHeaders: RequestHeaders;
 let invalidHeaders: RequestHeaders;
+let bookingResponse: BookingRequests;
 
 test.describe('GET /booking', () => {
   test.beforeAll(async () => {
@@ -12,9 +13,13 @@ test.describe('GET /booking', () => {
     invalidHeaders = await createInvalidHeaders();
   });
 
+  test.beforeEach(async () => {
+    bookingResponse = new BookingRequests();
+  });
+
   test('GET all bookings', async () => {
     //Act
-    const response = await BookingRequests.getBookings();
+    const response = await bookingResponse.getBookings();
     //Assert
     expect(response.status()).toBe(200);
 
@@ -24,7 +29,7 @@ test.describe('GET /booking', () => {
 
   test('GET booking for specific booking based upon the booking id provided', async () => {
     //Act
-    const response = await BookingRequests.getBookingById(1);
+    const response = await bookingResponse.getBookingById(1);
 
     //Assert
     expect(response.status()).toBe(200);
@@ -35,7 +40,7 @@ test.describe('GET /booking', () => {
 
   test('GET booking with non existing room', async () => {
     //Act
-    const response = await BookingRequests.getBookingById(99999);
+    const response = await bookingResponse.getBookingById(99999);
 
     //Assert
     expect(response.status()).toBe(404);
