@@ -20,7 +20,7 @@ export class BookingRequests {
   }
 }
 
-const getResponseBody = async (response: APIResponse) => {
+const getResponseBody = async (response: APIResponse): Promise<any> => {
   let responseBody = await response.text();
   if (responseBody) {
     try {
