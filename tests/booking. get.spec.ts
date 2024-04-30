@@ -1,25 +1,17 @@
 import { test, expect } from '@playwright/test';
 import { Booking } from '@helpers/booking/booking-model';
 import { BookingRequests } from '@helpers/booking/booking-requests';
-import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/headers';
 
-let validHeaders: RequestHeaders;
-let invalidHeaders: RequestHeaders;
-let bookingResponse: BookingRequests;
+let bookingRequests: BookingRequests;
 
 test.describe('GET /booking', () => {
-  test.beforeAll(async () => {
-    validHeaders = await createHeaders();
-    invalidHeaders = await createInvalidHeaders();
-  });
-
   test.beforeEach(async () => {
-    bookingResponse = new BookingRequests();
+    bookingRequests = new BookingRequests();
   });
 
   test('GET all bookings', async () => {
     //Act
-    const response = await bookingResponse.getBookings();
+    const response = await bookingRequests.getBookings();
     //Assert
     expect(response.response.status()).toBe(200);
     const body: Booking[] = response.responseBody;
@@ -28,7 +20,7 @@ test.describe('GET /booking', () => {
 
   test('GET booking for specific booking based upon the booking id provided', async () => {
     //Act
-    const response = await bookingResponse.getBookingById(1);
+    const response = await bookingRequests.getBookingById(1);
 
     //Assert
     expect(response.response.status()).toBe(200);
@@ -38,7 +30,7 @@ test.describe('GET /booking', () => {
 
   test('GET booking with non existing room', async () => {
     //Act
-    const response = await bookingResponse.getBookingById(99999);
+    const response = await bookingRequests.getBookingById(99999);
 
     //Assert
     expect(response.response.status()).toBe(404);
