@@ -14,7 +14,7 @@ test.describe('GET /booking', () => {
     const res = await bookingRequests.getBookings();
     //Assert
     expect(res.response.status()).toBe(200);
-    
+
     const body: Booking[] = res.responseBody;
     expect(body.length).toBeGreaterThan(0);
   });
@@ -25,7 +25,7 @@ test.describe('GET /booking', () => {
 
     //Assert
     expect(res.response.status()).toBe(200);
-    
+
     const body: Booking = res.responseBody;
     expect(Date.parse(body.bookingdates.checkin)).toBeLessThan(Date.parse(body.bookingdates.checkout));
   });
