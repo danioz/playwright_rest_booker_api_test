@@ -22,11 +22,11 @@ test.describe('POST /booking', () => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
     //Act
-    const response = await bookingRequests.createBooking(bookingData);
+    const res = await bookingRequests.createBooking(bookingData);
     //Assert
-    expect(response.response.status()).toBe(200);
+    expect(res.response.status()).toBe(200);
 
-    const body = response.responseBody;
+    const body = res.responseBody;
     expect(body.id).not.toBeNull();
 
     const booking: Booking = body.booking;
@@ -35,11 +35,11 @@ test.describe('POST /booking', () => {
 
   test('POST new booking with random data', async () => {
     //Act
-    const response = await bookingRequests.createBooking();
+    const res = await bookingRequests.createBooking();
     //Assert
-    expect(response.response.status()).toBe(200);
+    expect(res.response.status()).toBe(200);
 
-    const body = response.responseBody;
+    const body = res.responseBody;
     expect(body.id).not.toBeNull();
   });
 
