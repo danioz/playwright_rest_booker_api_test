@@ -1,20 +1,20 @@
 import { APIRequestContext, APIResponse, expect, request } from '@playwright/test';
 
 export type RequestHeaders = {
-  cookie: string;
+  Cookie: string;
 };
 
 export async function createHeaders(): Promise<RequestHeaders> {
   const token = await createToken();
 
   return {
-    cookie: `cookie=${token}`,
+    Cookie: `token=${token}`,
   };
 }
 
 export async function createInvalidHeaders(): Promise<RequestHeaders> {
   return {
-    cookie: 'cookie=invalid',
+    Cookie: 'token=invalid',
   };
 }
 
