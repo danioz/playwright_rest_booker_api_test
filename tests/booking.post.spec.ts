@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { Booking, BookingModel } from '@helpers/booking/booking-model';
 import { BookingRequests } from '@helpers/booking/booking-requests';
-import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/headers';
+import { RequestHeaders, createHeaders } from '@helpers/headers';
 import { DataFactory } from '@helpers/data/data-factory';
 
 let bookingRequests: BookingRequests;
