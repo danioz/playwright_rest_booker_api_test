@@ -1,5 +1,9 @@
+export type BookingModel = {
+  bookingid: number;
+  booking: Booking;
+};
+
 export type Booking = {
-  bookingid?: number;
   firstname: string;
   lastname: string;
   totalprice: number;

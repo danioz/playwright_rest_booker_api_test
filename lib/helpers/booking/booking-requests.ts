@@ -34,10 +34,7 @@ export class BookingRequests {
 
   async deleteBooking(bookingId: number, headers: RequestHeaders) {
     const client = await new BookingClient().getClient();
-    const response = await client.delete(`/booking/${bookingId}`, { headers: headers });
-    const responseBody = await getResponseBody(response);
-
-    return { response, responseBody };
+    return await client.delete(`/booking/${bookingId}`, { headers: headers });
   }
 }
 
