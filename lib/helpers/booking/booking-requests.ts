@@ -2,6 +2,7 @@ import { APIResponse } from '@playwright/test';
 import { BookingClient } from './booking-client';
 import { DataFactory } from '@helpers/data/data-factory';
 import { Booking } from './booking-model';
+import { RequestHeaders } from '@helpers/headers';
 
 export class BookingRequests {
   async getBookings() {
@@ -26,6 +27,14 @@ export class BookingRequests {
     }
     const client = await new BookingClient().getClient();
     const response = await client.post('/booking', { data: bookingData });
+    const responseBody = await getResponseBody(response);
+
+    return { response, responseBody };
+  }
+
+  async deleteBooking(bookingId: number, headers: RequestHeaders) {
+    const client = await new BookingClient().getClient();
+    const response = await client.delete(`/booking/${bookingId}`, { headers: headers });
     const responseBody = await getResponseBody(response);
 
     return { response, responseBody };
