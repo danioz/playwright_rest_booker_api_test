@@ -7,6 +7,7 @@ import { DataFactory } from '@helpers/data/data-factory';
 let validHeaders: RequestHeaders;
 let invalidHeaders: RequestHeaders;
 let bookingRequests: BookingRequests;
+let createdBookings: number[] = [];
 
 test.describe('POST /booking', () => {
   test.beforeAll(async () => {
@@ -18,6 +19,16 @@ test.describe('POST /booking', () => {
     bookingRequests = new BookingRequests();
   });
 
+  test.afterAll(async () => {
+    if (createdBookings) {
+      for (const bookingId of createdBookings) {
+        console.log('Deleting booking with id:', bookingId);
+        await bookingRequests.deleteBooking(bookingId, validHeaders);
+      }
+      createdBookings = [];
+    }
+  });
+
   test('POST new booking', async () => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
@@ -27,10 +38,13 @@ test.describe('POST /booking', () => {
     expect(res.response.status()).toBe(200);
 
     const body = res.responseBody;
-    expect(body.id).not.toBeNull();
+    expect(body.bookingid).not.toBeNull();
 
     const booking: Booking = body.booking;
     expect(booking).toMatchObject(bookingData);
+
+    // Add the created booking to the array
+    createdBookings.push(body.bookingid);
   });
 
   test('POST new booking with random data', async () => {
@@ -40,8 +54,11 @@ test.describe('POST /booking', () => {
     expect(res.response.status()).toBe(200);
 
     const body = res.responseBody;
-    expect(body.id).not.toBeNull();
+    expect(body.bookingid).not.toBeNull();
+
+    // Add the created booking to the array
+    createdBookings.push(body.bookingid);
   });
 
-  test('BOOKING new', async () => {});
+  // test('BOOKING new', async () => {});
 });
