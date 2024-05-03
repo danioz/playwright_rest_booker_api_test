@@ -15,6 +15,7 @@ export default defineConfig({
   use: {
     extraHTTPHeaders: {
       'playwright-solutions': 'true',
+      'Content-Type': 'application/json',
     },
     baseURL: process.env.URL,
     ignoreHTTPSErrors: true,
