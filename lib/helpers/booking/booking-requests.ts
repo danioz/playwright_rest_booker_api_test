@@ -36,6 +36,14 @@ export class BookingRequests {
     const client = await new BookingClient().getClient();
     return await client.delete(`/booking/${bookingId}`, { headers: headers });
   }
+
+  async updateBooking(bookingId: number, bookingData: Booking, headers: RequestHeaders) {
+    const client = await new BookingClient().getClient();
+    const response = await client.put(`/booking/${bookingId}`, { data: bookingData, headers: { ...headers, Accept: 'application/json' } });
+    const responseBody = await getResponseBody(response);
+
+    return { response, responseBody };
+  }
 }
 
 const getResponseBody = async (response: APIResponse): Promise<any> => {
