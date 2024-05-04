@@ -19,7 +19,7 @@ export default defineConfig({
     },
     baseURL: process.env.URL,
     ignoreHTTPSErrors: true,
-    trace: 'on', // 'retain-on-failure'
+    trace: 'retain-on-failure', // 'retain-on-failure', 'on'
   },
   projects: [
     { name: 'setup', testMatch: /auth.setup.ts/, teardown: 'teardown' },
