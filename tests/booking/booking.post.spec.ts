@@ -40,9 +40,9 @@ test.describe('POST /booking', () => {
     createdBookings.push(body.bookingid);
 
     await test.step('Verify booking was created', async () => {
-      const updatedBooking = await bookingRequests.getBookingById(body.bookingid);
-      expect(updatedBooking.response.status()).toBe(200);
-      expect(updatedBooking.responseBody).toMatchObject(bookingData);
+      const createdBooking = await bookingRequests.getBookingById(body.bookingid);
+      expect(createdBooking.response.status()).toBe(200);
+      expect(createdBooking.responseBody).toMatchObject(bookingData);
     });
   });
 
@@ -59,9 +59,9 @@ test.describe('POST /booking', () => {
     createdBookings.push(body.bookingid);
 
     await test.step('Verify booking was created', async () => {
-      const updatedBooking = await bookingRequests.getBookingById(body.bookingid);
-      expect(updatedBooking.response.status()).toBe(200);
-      // expect(updatedBooking.responseBody).toMatchObject(bookingData); todo: fix this
+      const createdBooking = await bookingRequests.getBookingById(body.bookingid);
+      expect(createdBooking.response.status()).toBe(200);
+      // expect(createdBooking.responseBody).toMatchObject(bookingData); todo: fix this
     });
   });
 

@@ -31,8 +31,8 @@ test.describe('DELETE /booking', () => {
     expect(res.status()).toBe(201);
 
     await test.step('Verify booking was deleted', async () => {
-      const updatedBooking = await bookingRequests.getBookingById(bookingId);
-      expect(updatedBooking.response.status()).toBe(404);
+      const deletedBooking = await bookingRequests.getBookingById(bookingId);
+      expect(deletedBooking.response.status()).toBe(404);
     });
   });
 });
