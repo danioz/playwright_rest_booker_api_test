@@ -1,19 +1,121 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, APIResponse } from '@playwright/test';
+import exp from 'constants';
 
-test('POST validate', async ({ request }) => {
-  const response = await request.post('/auth/validate');
+test.describe('POST /auth', () => {
+  test('POST validate with valid credentials', async ({ request }) => {
+    //Act
+    const response: APIResponse = await request.post('/auth', {
+      data: {
+        username: process.env.USERNAME,
+        password: process.env.PASSWORD,
+      },
+    });
 
-  expect(response.ok()).toBeTruthy();
-});
+    //Assert
+    const responseBody = await response.json();
 
-test('POST login', async ({ request }) => {
-  const response = await request.post('/auth/login');
+    expect(response.status()).toBe(200);
+  });
 
-  expect(response.ok()).toBeTruthy();
-});
+  test('POST validate without username', async ({ request }) => {
+    //Act
+    const response: APIResponse = await request.post('/auth', {
+      data: {
+        password: process.env.PASSWORD,
+      },
+    });
 
-test('POST logout', async ({ request }) => {
-  const response = await request.post('/auth/logout');
+    //Assert
+    const responseBody = await response.json();
 
-  expect(response.ok()).toBeTruthy();
+    expect(response.status()).toBe(200);
+    expect(responseBody.reason).toBe('Bad credentials');
+  });
+
+  test('POST validate without password', async ({ request }) => {
+    //Act
+    const response: APIResponse = await request.post('/auth', {
+      data: {
+        username: process.env.USERNAME,
+      },
+    });
+
+    //Assert
+    const responseBody = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(responseBody.reason).toBe('Bad credentials');
+  });
+
+  test('POST validate without username and password', async ({ request }) => {
+    //Act
+    const response: APIResponse = await request.post('/auth', {
+      data: {},
+    });
+
+    //Assert
+    const responseBody = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(responseBody.reason).toBe('Bad credentials');
+  });
+
+  test('POST validate without body', async ({ request }) => {
+    //Act
+    const response: APIResponse = await request.post('/auth', {});
+
+    //Assert
+    const responseBody = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(responseBody.reason).toBe('Bad credentials');
+  });
+
+  test('POST validate with invalid username', async ({ request }) => {
+    //Act
+    const response: APIResponse = await request.post('/auth', {
+      data: {
+        username: 'invalid',
+        password: process.env.PASSWORD,
+      },
+    });
+
+    //Assert
+    const responseBody = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(responseBody.reason).toBe('Bad credentials');
+  });
+
+  test('POST validate with invalid password', async ({ request }) => {
+    //Act
+    const response: APIResponse = await request.post('/auth', {
+      data: {
+        username: process.env.USERNAME,
+        password: 'invalid',
+      },
+    });
+
+    //Assert
+    const responseBody = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(responseBody.reason).toBe('Bad credentials');
+  });
+
+  test('POST validate with invalid username and password', async ({ request }) => {
+    //Act
+    const response: APIResponse = await request.post('/auth', {
+      data: {
+        username: 'invalid',
+        password: 'invalid',
+      },
+    });
+
+    //Assert
+    const responseBody = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(responseBody.reason).toBe('Bad credentials');
+  });
 });
