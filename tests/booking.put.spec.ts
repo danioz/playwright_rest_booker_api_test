@@ -45,12 +45,12 @@ test.describe('PUT /booking', () => {
 
     const booking: Booking = res.responseBody;
     expect(booking).toMatchObject(bookingData);
-    
-    await test.step("Verify booking was updated", async () => {
+
+    await test.step('Verify booking was updated', async () => {
       const updatedBooking = await bookingRequests.getBookingById(bookingId);
       expect(updatedBooking.response.status()).toBe(200);
       expect(updatedBooking.responseBody).toMatchObject(bookingData);
-    })
+    });
   });
 
   test('PUT booking with invalid credentials', async () => {
@@ -75,7 +75,7 @@ test.describe('PUT /booking', () => {
 
   test('PUT booking without body', async () => {
     //Act
-    const res = await bookingRequests.updateBooking(bookingId, undefined ,validHeaders);
+    const res = await bookingRequests.updateBooking(bookingId, undefined, validHeaders);
     //Assert
     expect(res.response.status()).toBe(400);
     expect(res.responseBody).toBe('Bad Request');
