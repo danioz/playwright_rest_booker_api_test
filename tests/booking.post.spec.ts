@@ -38,6 +38,12 @@ test.describe('POST /booking', () => {
 
     // Add the created booking to the array
     createdBookings.push(body.bookingid);
+
+    await test.step('Verify booking was created', async () => {
+      const updatedBooking = await bookingRequests.getBookingById(body.bookingid);
+      expect(updatedBooking.response.status()).toBe(200);
+      expect(updatedBooking.responseBody).toMatchObject(bookingData);
+    });
   });
 
   test('POST new booking with random data', async () => {
@@ -51,7 +57,13 @@ test.describe('POST /booking', () => {
 
     // Add the created booking to the array
     createdBookings.push(body.bookingid);
+
+    await test.step('Verify booking was created', async () => {
+      const updatedBooking = await bookingRequests.getBookingById(body.bookingid);
+      expect(updatedBooking.response.status()).toBe(200);
+      // expect(updatedBooking.responseBody).toMatchObject(bookingData); todo: fix this
+    });
   });
 
-  // test('BOOKING new', async () => {});
+  // test('BOOKING new', async () => {});  todo: more tests
 });
