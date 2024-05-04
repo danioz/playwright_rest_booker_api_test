@@ -28,7 +28,7 @@ test.describe('DELETE /booking', () => {
     //Act
     const res = await bookingRequests.deleteBooking(bookingId, validHeaders);
     //Assert
-    expect(res.status()).toBe(200);
+    expect(res.status()).toBe(201);
 
     await test.step('Verify booking was deleted', async () => {
       const updatedBooking = await bookingRequests.getBookingById(bookingId);
