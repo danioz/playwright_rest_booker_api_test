@@ -12,7 +12,31 @@ export class DataFactory {
         checkin: faker.date.past().toISOString().split('T')[0],
         checkout: faker.date.soon({ days: 10 }).toISOString().split('T')[0],
       },
-      additionalneeds: faker.word.noun(),
+      additionalneeds: getAdditionalNeeds(),
     };
   }
 }
+
+const getAdditionalNeeds = (): string => {
+  return additionalNeeds[faker.number.int({ min: 0, max: additionalNeeds.length - 1 })];
+};
+
+const additionalNeeds = [
+  'Breakfast',
+  'Lunch',
+  'Dinner',
+  'Snacks',
+  'Drinks',
+  'Dessert',
+  'Room Service',
+  'Laundry',
+  'Cleaning',
+  'Transportation',
+  'Tickets',
+  'Activities',
+  'Spa',
+  'Gym',
+  'Pool',
+  'Sauna',
+  'Massage',
+];
