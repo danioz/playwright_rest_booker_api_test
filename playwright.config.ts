@@ -23,7 +23,8 @@ export default defineConfig({
   },
   projects: [
     { name: 'setup', testMatch: /auth.setup.ts/, teardown: 'teardown' },
-    { name: 'booking', dependencies: ['setup'] },
+    { name: 'booking', dependencies: ['setup'], testMatch: /booking./ },
     { name: 'teardown', testMatch: /teardown.ts/ },
+    { name: 'auth', testMatch: /auth.post.spec.ts/ },
   ],
 });
