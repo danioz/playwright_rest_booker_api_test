@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { Booking } from '@helpers/booking/booking-model';
 import { BookingRequests } from '@helpers/booking/booking-requests';
+import Tag from 'lib/tag';
 
 let bookingRequests: BookingRequests;
 
@@ -9,14 +10,14 @@ test.describe('GET /booking', () => {
     bookingRequests = new BookingRequests();
   });
 
-  test('GET all bookings', async () => {
+  test(`GET all bookings.${Tag.TAG_SECTION}${Tag.SMOKE_TEST}`, async () => {
     //Act
     const res = await bookingRequests.getBookings();
     //Assert
     expect(res.response.status()).toBe(200);
 
     const body: Booking[] = res.responseBody;
-    expect(body.length).toBeGreaterThan(0);
+    expect(body.length, `Response was: ${JSON.stringify(res.responseBody)}`).toBeGreaterThan(0);
   });
 
   test('GET booking for specific booking based upon the booking id provided', async () => {
@@ -27,7 +28,10 @@ test.describe('GET /booking', () => {
     expect(res.response.status()).toBe(200);
 
     const body: Booking = res.responseBody;
-    expect(Date.parse(body.bookingdates.checkin)).toBeLessThan(Date.parse(body.bookingdates.checkout));
+    expect(
+      Date.parse(body.bookingdates.checkin),
+      `Booking dates were ${JSON.stringify(body.bookingdates)}`
+    ).toBeLessThan(Date.parse(body.bookingdates.checkout));
   });
 
   test('GET booking with non existing room', async () => {
@@ -36,6 +40,6 @@ test.describe('GET /booking', () => {
 
     //Assert
     expect(res.response.status()).toBe(404);
-    expect(res.responseBody).toBe('Not Found');
+    expect(res.responseBody, `Response was: ${JSON.stringify(res.responseBody)}`).toBe('Not Found');
   });
 });
