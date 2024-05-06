@@ -1,51 +1,62 @@
-import { APIResponse } from '@playwright/test';
+import { APIResponse, test } from '@playwright/test';
 import { BookingClient } from './booking-client';
 import { DataFactory } from '@helpers/data/data-factory';
 import { Booking } from './booking-model';
 import { RequestHeaders } from '@helpers/headers';
+import endpoints from '@helpers/apiEndpoints';
 
 export class BookingRequests {
   async getBookings() {
-    const client = await new BookingClient().getClient();
-    const response = await client.get('/booking');
-    const responseBody = await getResponseBody(response);
+    return await test.step('GET all bookings', async () => {
+      const client = await new BookingClient().getClient();
+      const response = await client.get(endpoints.booking.booking);
+      const responseBody = await getResponseBody(response);
 
-    return { response, responseBody };
+      return { response, responseBody };
+    });
   }
 
   async getBookingById(bookingId: number) {
-    const client = await new BookingClient().getClient();
-    const response = await client.get(`/booking/${bookingId}`);
-    const responseBody = await getResponseBody(response);
+    return await test.step(`GET booking for specific booking based upon the booking id provided: ${bookingId}`, async () => {
+      const client = await new BookingClient().getClient();
+      const response = await client.get(endpoints.booking.bookingId(bookingId));
+      const responseBody = await getResponseBody(response);
 
-    return { response, responseBody };
+      return { response, responseBody };
+    });
   }
 
   async createBooking(bookingData?: Booking) {
     if (!bookingData) {
       bookingData = DataFactory.getBooking();
     }
-    const client = await new BookingClient().getClient();
-    const response = await client.post('/booking', { data: bookingData });
-    const responseBody = await getResponseBody(response);
+    return await test.step(`POST new booking with body: ${JSON.stringify(bookingData)}`, async () => {
+      const client = await new BookingClient().getClient();
+      const response = await client.post(endpoints.booking.booking, { data: bookingData });
+      const responseBody = await getResponseBody(response);
 
-    return { response, responseBody };
+      return { response, responseBody };
+    });
   }
 
   async deleteBooking(bookingId: number, headers: RequestHeaders) {
-    const client = await new BookingClient().getClient();
-    return await client.delete(`/booking/${bookingId}`, { headers: headers });
+    return test.step(`DELETE booking with booking id: ${bookingId}`, async () => {
+      const client = await new BookingClient().getClient();
+      return await client.delete(endpoints.booking.bookingId(bookingId), { headers: headers });
+    });
   }
 
   async updateBooking(bookingId: number, bookingData?: Booking, headers?: RequestHeaders) {
-    const client = await new BookingClient().getClient();
-    const response = await client.put(`/booking/${bookingId}`, {
-      data: bookingData,
-      headers: { ...headers, Accept: 'application/json' },
-    });
-    const responseBody = await getResponseBody(response);
+    return await test.step(`PUT booking with body: ${JSON.stringify(bookingData)}`, async () => {
+      const client = await new BookingClient().getClient();
+      const response = await client.put(endpoints.booking.bookingId(bookingId), {
+        data: bookingData,
+        headers: { ...headers, Accept: 'application/json' },
+      });
+      const responseBody = await getResponseBody(response);
 
-    return { response, responseBody };
+      return { response, responseBody };
+    });
   }
 }
 
