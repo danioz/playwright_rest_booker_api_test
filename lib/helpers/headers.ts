@@ -1,21 +1,25 @@
-import { APIRequestContext, APIResponse, expect, request } from '@playwright/test';
+import { APIRequestContext, APIResponse, expect, request, test } from '@playwright/test';
 
 export type RequestHeaders = {
   Cookie: string;
 };
 
 export async function createHeaders(): Promise<RequestHeaders> {
-  const token = await createToken();
+  return await test.step('Create headers', async () => {
+    const token = await createToken();
 
-  return {
-    Cookie: `token=${token}`,
-  };
+    return {
+      Cookie: `token=${token}`,
+    };
+  });
 }
 
 export async function createInvalidHeaders(): Promise<RequestHeaders> {
-  return {
-    Cookie: 'token=invalid',
-  };
+  return await test.step('Create invalid headers', async () => {
+    return {
+      Cookie: 'token=invalid',
+    };
+  });
 }
 
 type TokenResponse = {
@@ -23,15 +27,17 @@ type TokenResponse = {
 };
 
 async function createToken(): Promise<string> {
-  const contextRequest: APIRequestContext = await request.newContext();
-  const response: APIResponse = await contextRequest.post('auth', {
-    data: {
-      username: process.env.USERNAME,
-      password: process.env.PASSWORD,
-    },
-  });
+  return await test.step('Create token', async () => {
+    const contextRequest: APIRequestContext = await request.newContext();
+    const response: APIResponse = await contextRequest.post('auth', {
+      data: {
+        username: process.env.USERNAME,
+        password: process.env.PASSWORD,
+      },
+    });
 
-  expect(response.status()).toBe(200);
-  const body: TokenResponse = await response.json();
-  return body.token;
+    expect(response.status()).toBe(200);
+    const body: TokenResponse = await response.json();
+    return body.token;
+  });
 }
