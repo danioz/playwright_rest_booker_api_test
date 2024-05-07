@@ -26,12 +26,10 @@ test.describe('PUT /booking', () => {
   });
 
   test.afterAll(async () => {
-    if (createdBookings) {
-      for (const bookingId of createdBookings) {
-        await bookingRequests.deleteBooking(bookingId, validHeaders);
-      }
-      createdBookings = [];
+    for (const bookingId of createdBookings) {
+      await bookingRequests.deleteBooking(bookingId, validHeaders);
     }
+    createdBookings = [];
   });
 
   test('PUT booking', async () => {

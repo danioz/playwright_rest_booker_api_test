@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { Booking, BookingModel } from '@helpers/booking/booking-model';
+import { BookingModel } from '@helpers/booking/booking-model';
 import { BookingRequests } from '@helpers/booking/booking-requests';
 import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/headers';
 
@@ -24,6 +24,16 @@ test.describe('DELETE /booking', () => {
     createdBookings.push(bookingId);
   });
 
+  test.afterAll(async () => {
+    for (const bookingId of createdBookings) {
+      const res = await bookingRequests.getBookingById(bookingId);
+      if (res.response.status() === 200) {
+        await bookingRequests.deleteBooking(bookingId, validHeaders);
+      }
+    }
+    createdBookings = [];
+  });
+
   test('DELETE booking', async () => {
     //Act
     const res = await bookingRequests.deleteBooking(bookingId, validHeaders);
@@ -34,5 +44,12 @@ test.describe('DELETE /booking', () => {
       const deletedBooking = await bookingRequests.getBookingById(bookingId);
       expect(deletedBooking.response.status()).toBe(404);
     });
+  });
+
+  test('DELETE booking without valid credentials', async () => {
+    //Act
+    const res = await bookingRequests.deleteBooking(bookingId, invalidHeaders);
+    //Assert
+    expect(res.status()).toBe(403);
   });
 });
