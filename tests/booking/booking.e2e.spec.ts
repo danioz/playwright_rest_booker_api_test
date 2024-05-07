@@ -1,20 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import { BookingModel , Booking } from '@helpers/booking/booking-model';
-import { BookingRequests } from '@helpers/booking/booking-requests';
 import { RequestHeaders, createHeaders } from '@helpers/headers';
 import { DataFactory } from '@helpers/data/data-factory';
 import Tag from 'lib/tag';
 
-let bookingRequests: BookingRequests;
 let validHeaders: RequestHeaders;
 
 test.describe('e2e tests for booking', () => {
   test.beforeAll(async () => {
     validHeaders = await createHeaders();
-    bookingRequests = new BookingRequests();
   });
 
-  test('e2e tests for booking', { tag: [Tag.REGRESSION_TEST, Tag.SANITY_TEST, Tag.END_TO_END_TEST] }, async () => {
+  test('e2e tests for booking', { tag: [Tag.REGRESSION_TEST, Tag.SANITY_TEST, Tag.END_TO_END_TEST] }, async ({bookingRequests}) => {
     const bookingId = await test.step('Create a booking', async () => {
       //Arrange
       const bookingData: Booking = DataFactory.getBooking();

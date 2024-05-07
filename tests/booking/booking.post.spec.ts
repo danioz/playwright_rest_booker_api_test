@@ -1,17 +1,12 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import { Booking, BookingModel } from '@helpers/booking/booking-model';
-import { BookingRequests } from '@helpers/booking/booking-requests';
 import { RequestHeaders, createHeaders } from '@helpers/headers';
 import { DataFactory } from '@helpers/data/data-factory';
 import Tag from 'lib/tag';
 
-let bookingRequests: BookingRequests;
 let createdBookings: number[] = [];
 
 test.describe('POST /booking', () => {
-  test.beforeEach(async () => {
-    bookingRequests = new BookingRequests();
-  });
 
   test.afterAll(async () => {
     let validHeaders: RequestHeaders = await createHeaders();
@@ -23,7 +18,7 @@ test.describe('POST /booking', () => {
     }
   });
 
-  test('POST new booking', { tag: Tag.SMOKE_TEST }, async () => {
+  test('POST new booking', { tag: Tag.SMOKE_TEST }, async ({bookingRequests}) => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
     //Act
@@ -47,7 +42,7 @@ test.describe('POST /booking', () => {
     });
   });
 
-  test('POST new booking with random data', { tag: Tag.SMOKE_TEST }, async () => {
+  test('POST new booking with random data', { tag: Tag.SMOKE_TEST }, async ({bookingRequests}) => {
     //Act
     const res = await bookingRequests.createBooking();
     //Assert
@@ -65,6 +60,4 @@ test.describe('POST /booking', () => {
       // expect(createdBooking.responseBody).toMatchObject(bookingData); todo: fix this
     });
   });
-
-  // test('BOOKING new', async () => {});  todo: more tests
 });

@@ -1,16 +1,12 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import { Booking } from '@helpers/booking/booking-model';
-import { BookingRequests } from '@helpers/booking/booking-requests';
 import Tag from 'lib/tag';
 
-let bookingRequests: BookingRequests;
+// let bookingRequests: BookingRequests;
 
 test.describe('GET /booking', () => {
-  test.beforeEach(async () => {
-    bookingRequests = new BookingRequests();
-  });
 
-  test('GET all bookings', { tag: Tag.SMOKE_TEST }, async () => {
+  test('GET all bookings', { tag: Tag.SMOKE_TEST }, async ({bookingRequests}) => {
     //Act
     const res = await bookingRequests.getBookings();
     //Assert
@@ -20,7 +16,7 @@ test.describe('GET /booking', () => {
     expect(body.length, `Response was: ${JSON.stringify(res.responseBody)}`).toBeGreaterThan(0);
   });
 
-  test('GET booking for specific booking based upon the booking id provided', { tag: Tag.SMOKE_TEST }, async () => {
+  test('GET booking for specific booking based upon the booking id provided', { tag: Tag.SMOKE_TEST }, async ({bookingRequests}) => {
     //Act
     const res = await bookingRequests.getBookingById(1);
 
@@ -34,7 +30,7 @@ test.describe('GET /booking', () => {
     ).toBeLessThan(Date.parse(body.bookingdates.checkout));
   });
 
-  test('GET booking with non existing room', { tag: Tag.SMOKE_TEST }, async () => {
+  test('GET booking with non existing room', { tag: Tag.SMOKE_TEST }, async ({bookingRequests}) => {
     //Act
     const res = await bookingRequests.getBookingById(99999);
 

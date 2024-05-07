@@ -1,10 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import { BookingModel } from '@helpers/booking/booking-model';
-import { BookingRequests } from '@helpers/booking/booking-requests';
 import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/headers';
 import Tag from 'lib/tag';
 
-let bookingRequests: BookingRequests;
 let validHeaders: RequestHeaders;
 let invalidHeaders: RequestHeaders;
 let createdBookings: number[] = [];
@@ -16,16 +14,14 @@ test.describe('DELETE /booking', () => {
     invalidHeaders = await createInvalidHeaders();
   });
 
-  test.beforeEach(async () => {
-    bookingRequests = new BookingRequests();
-
+  test.beforeEach(async ({bookingRequests}) => {
     const res = await bookingRequests.createBooking();
     const body: BookingModel = res.responseBody;
     bookingId = body.bookingid;
     createdBookings.push(bookingId);
   });
 
-  test.afterAll(async () => {
+  test.afterAll(async ({bookingRequests}) => {
     for (const bookingId of createdBookings) {
       const res = await bookingRequests.getBookingById(bookingId);
       if (res.response.status() === 200) {
@@ -35,7 +31,7 @@ test.describe('DELETE /booking', () => {
     createdBookings = [];
   });
 
-  test('DELETE booking', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async () => {
+  test('DELETE booking', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async ({bookingRequests}) => {
     //Act
     const res = await bookingRequests.deleteBooking(bookingId, validHeaders);
     //Assert
@@ -47,7 +43,7 @@ test.describe('DELETE /booking', () => {
     });
   });
 
-  test('DELETE booking without valid credentials', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async () => {
+  test('DELETE booking without valid credentials', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async ({bookingRequests}) => {
     //Act
     const res = await bookingRequests.deleteBooking(bookingId, invalidHeaders);
     //Assert
