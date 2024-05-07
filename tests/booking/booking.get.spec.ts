@@ -10,7 +10,7 @@ test.describe('GET /booking', () => {
     bookingRequests = new BookingRequests();
   });
 
-  test(`GET all bookings.${Tag.TAG_SECTION}${Tag.SMOKE_TEST}`, async () => {
+  test('GET all bookings', { tag: Tag.SMOKE_TEST }, async () => {
     //Act
     const res = await bookingRequests.getBookings();
     //Assert
@@ -20,7 +20,7 @@ test.describe('GET /booking', () => {
     expect(body.length, `Response was: ${JSON.stringify(res.responseBody)}`).toBeGreaterThan(0);
   });
 
-  test('GET booking for specific booking based upon the booking id provided', async () => {
+  test('GET booking for specific booking based upon the booking id provided', { tag: Tag.SMOKE_TEST }, async () => {
     //Act
     const res = await bookingRequests.getBookingById(1);
 
@@ -34,7 +34,7 @@ test.describe('GET /booking', () => {
     ).toBeLessThan(Date.parse(body.bookingdates.checkout));
   });
 
-  test('GET booking with non existing room', async () => {
+  test('GET booking with non existing room', { tag: Tag.SMOKE_TEST }, async () => {
     //Act
     const res = await bookingRequests.getBookingById(99999);
 

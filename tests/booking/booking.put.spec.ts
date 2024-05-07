@@ -3,6 +3,7 @@ import { Booking, BookingModel } from '@helpers/booking/booking-model';
 import { BookingRequests } from '@helpers/booking/booking-requests';
 import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/headers';
 import { DataFactory } from '@helpers/data/data-factory';
+import Tag from 'lib/tag';
 
 let bookingRequests: BookingRequests;
 let validHeaders: RequestHeaders;
@@ -32,7 +33,7 @@ test.describe('PUT /booking', () => {
     createdBookings = [];
   });
 
-  test('PUT booking', async () => {
+  test('PUT booking', { tag: Tag.SMOKE_TEST }, async () => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
 
@@ -51,7 +52,7 @@ test.describe('PUT /booking', () => {
     });
   });
 
-  test('PUT booking with invalid credentials', async () => {
+  test('PUT booking with invalid credentials', { tag: Tag.SMOKE_TEST }, async () => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
     //Act
@@ -61,7 +62,7 @@ test.describe('PUT /booking', () => {
     expect(res.responseBody).toBe('Forbidden');
   });
 
-  test('PUT booking with an id that does not exist', async () => {
+  test('PUT booking with an id that does not exist', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async () => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
     //Act
@@ -71,7 +72,7 @@ test.describe('PUT /booking', () => {
     expect(res.responseBody).toBe('Method Not Allowed');
   });
 
-  test('PUT booking without body', async () => {
+  test('PUT booking without body', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async () => {
     //Act
     const res = await bookingRequests.updateBooking(bookingId, undefined, validHeaders);
     //Assert

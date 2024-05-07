@@ -3,6 +3,7 @@ import { Booking, BookingModel } from '@helpers/booking/booking-model';
 import { BookingRequests } from '@helpers/booking/booking-requests';
 import { RequestHeaders, createHeaders } from '@helpers/headers';
 import { DataFactory } from '@helpers/data/data-factory';
+import Tag from 'lib/tag';
 
 let bookingRequests: BookingRequests;
 let createdBookings: number[] = [];
@@ -22,7 +23,7 @@ test.describe('POST /booking', () => {
     }
   });
 
-  test('POST new booking', async () => {
+  test('POST new booking', { tag: Tag.SMOKE_TEST }, async () => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
     //Act
@@ -46,7 +47,7 @@ test.describe('POST /booking', () => {
     });
   });
 
-  test('POST new booking with random data', async () => {
+  test('POST new booking with random data', { tag: Tag.SMOKE_TEST }, async () => {
     //Act
     const res = await bookingRequests.createBooking();
     //Assert

@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { BookingModel } from '@helpers/booking/booking-model';
 import { BookingRequests } from '@helpers/booking/booking-requests';
 import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/headers';
+import Tag from 'lib/tag';
 
 let bookingRequests: BookingRequests;
 let validHeaders: RequestHeaders;
@@ -34,7 +35,7 @@ test.describe('DELETE /booking', () => {
     createdBookings = [];
   });
 
-  test('DELETE booking', async () => {
+  test('DELETE booking', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async () => {
     //Act
     const res = await bookingRequests.deleteBooking(bookingId, validHeaders);
     //Assert
@@ -46,7 +47,7 @@ test.describe('DELETE /booking', () => {
     });
   });
 
-  test('DELETE booking without valid credentials', async () => {
+  test('DELETE booking without valid credentials', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async () => {
     //Act
     const res = await bookingRequests.deleteBooking(bookingId, invalidHeaders);
     //Assert
