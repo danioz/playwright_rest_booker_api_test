@@ -1,14 +1,11 @@
 import { test, expect } from '../fixtures';
 import { Booking, BookingModel } from '@helpers/booking/booking-model';
-import { RequestHeaders, createHeaders } from '@helpers/headers';
-import { DataFactory } from '@helpers/data/data-factory';
 import Tag from 'lib/tag';
 
 let createdBookings: number[] = [];
 
 test.describe('POST /booking', () => {
-  test.afterAll(async ({ bookingRequests }) => {
-    let validHeaders: RequestHeaders = await createHeaders();
+  test.afterAll(async ({ bookingRequests, validHeaders }) => {
     if (createdBookings) {
       for (const bookingId of createdBookings) {
         await bookingRequests.deleteBooking(bookingId, validHeaders);
