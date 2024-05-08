@@ -1,5 +1,5 @@
 import { test, expect } from '../fixtures';
-import { Booking, BookingModel } from '@helpers/booking/booking-model';
+import { Booking } from '@helpers/booking/booking-model';
 import Tag from 'lib/tag';
 
 test.describe('PUT /booking', () => {
