@@ -9,6 +9,7 @@ type MyFixtures = {
   validHeaders: RequestHeaders;
   invalidHeaders: RequestHeaders;
   bookingData: Booking;
+  createdBookingId: number;
 };
 
 export const test = base.extend<MyFixtures>({
@@ -23,6 +24,18 @@ export const test = base.extend<MyFixtures>({
   },
   bookingData: async ({}, use) => {
     await use(DataFactory.getBooking());
+  },
+  createdBookingId: async ({ bookingRequests, bookingData, validHeaders }, use) => {
+    const res = await bookingRequests.createBooking(bookingData);
+    const body = res.responseBody;
+    const bookingId = body.bookingid;
+    await use(bookingId);
+
+    //Delete the booking after the test
+    const response = await bookingRequests.getBookingById(bookingId);
+    if (response.response.status() === 200) {
+      await bookingRequests.deleteBooking(bookingId, validHeaders);
+    }
   },
 });
 
