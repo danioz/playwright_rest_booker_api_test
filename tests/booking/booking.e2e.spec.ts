@@ -7,10 +7,8 @@ test.describe('e2e tests for booking', () => {
   test(
     'e2e tests for booking',
     { tag: [Tag.REGRESSION_TEST, Tag.SANITY_TEST, Tag.END_TO_END_TEST] },
-    async ({ bookingRequests, validHeaders }) => {
+    async ({ bookingRequests, bookingData, validHeaders }) => {
       const bookingId = await test.step('Create a booking', async () => {
-        //Arrange
-        const bookingData: Booking = DataFactory.getBooking();
         //Act
         const res = await bookingRequests.createBooking(bookingData);
         //Assert

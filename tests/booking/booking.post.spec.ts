@@ -17,9 +17,7 @@ test.describe('POST /booking', () => {
     }
   });
 
-  test('POST new booking', { tag: Tag.SMOKE_TEST }, async ({ bookingRequests }) => {
-    //Arrange
-    const bookingData: Booking = DataFactory.getBooking();
+  test('POST new booking', { tag: Tag.SMOKE_TEST }, async ({ bookingRequests, bookingData }) => {
     //Act
     const res = await bookingRequests.createBooking(bookingData);
     //Assert

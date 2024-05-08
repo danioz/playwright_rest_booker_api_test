@@ -1,11 +1,14 @@
 import { test as base } from '@playwright/test';
 import { BookingRequests } from '@helpers/booking/booking-requests';
 import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/headers';
+import { Booking } from '@helpers/booking/booking-model';
+import { DataFactory } from '@helpers/data/data-factory';
 
 type MyFixtures = {
   bookingRequests: BookingRequests;
   validHeaders: RequestHeaders;
   invalidHeaders: RequestHeaders;
+  bookingData: Booking;
 };
 
 export const test = base.extend<MyFixtures>({
@@ -17,6 +20,9 @@ export const test = base.extend<MyFixtures>({
   },
   invalidHeaders: async ({}, use) => {
     await use(await createInvalidHeaders());
+  },
+  bookingData: async ({}, use) => {
+    await use(DataFactory.getBooking());
   },
 });
 
