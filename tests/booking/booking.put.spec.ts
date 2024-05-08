@@ -1,36 +1,27 @@
 import { test, expect } from '../fixtures';
 import { Booking, BookingModel } from '@helpers/booking/booking-model';
-import { RequestHeaders, createHeaders, createInvalidHeaders } from '@helpers/headers';
 import { DataFactory } from '@helpers/data/data-factory';
 import Tag from 'lib/tag';
 
-let validHeaders: RequestHeaders;
-let invalidHeaders: RequestHeaders;
 let createdBookings: number[] = [];
 let bookingId: number;
 
 test.describe('PUT /booking', () => {
-  test.beforeAll(async () => {
-    validHeaders = await createHeaders();
-    invalidHeaders = await createInvalidHeaders();
-  });
-
-  test.beforeEach(async ({bookingRequests}) => {
-
+  test.beforeEach(async ({ bookingRequests }) => {
     const res = await bookingRequests.createBooking();
     const body: BookingModel = res.responseBody;
     bookingId = body.bookingid;
     createdBookings.push(bookingId);
   });
 
-  test.afterAll(async ({bookingRequests}) => {
+  test.afterAll(async ({ bookingRequests, validHeaders }) => {
     for (const bookingId of createdBookings) {
       await bookingRequests.deleteBooking(bookingId, validHeaders);
     }
     createdBookings = [];
   });
 
-  test('PUT booking', { tag: Tag.SMOKE_TEST }, async ({bookingRequests}) => {
+  test('PUT booking', { tag: Tag.SMOKE_TEST }, async ({ bookingRequests, validHeaders }) => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
 
@@ -49,7 +40,7 @@ test.describe('PUT /booking', () => {
     });
   });
 
-  test('PUT booking with invalid credentials', { tag: Tag.SMOKE_TEST }, async ({bookingRequests}) => {
+  test('PUT booking with invalid credentials', { tag: Tag.SMOKE_TEST }, async ({ bookingRequests, invalidHeaders }) => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
     //Act
@@ -59,21 +50,29 @@ test.describe('PUT /booking', () => {
     expect(res.responseBody).toBe('Forbidden');
   });
 
-  test('PUT booking with an id that does not exist', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async ({bookingRequests}) => {
-    //Arrange
-    const bookingData: Booking = DataFactory.getBooking();
-    //Act
-    const res = await bookingRequests.updateBooking(999999, bookingData, validHeaders);
-    //Assert
-    expect(res.response.status()).toBe(405);
-    expect(res.responseBody).toBe('Method Not Allowed');
-  });
+  test(
+    'PUT booking with an id that does not exist',
+    { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] },
+    async ({ bookingRequests, validHeaders }) => {
+      //Arrange
+      const bookingData: Booking = DataFactory.getBooking();
+      //Act
+      const res = await bookingRequests.updateBooking(999999, bookingData, validHeaders);
+      //Assert
+      expect(res.response.status()).toBe(405);
+      expect(res.responseBody).toBe('Method Not Allowed');
+    }
+  );
 
-  test('PUT booking without body', { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] }, async ({bookingRequests}) => {
-    //Act
-    const res = await bookingRequests.updateBooking(bookingId, undefined, validHeaders);
-    //Assert
-    expect(res.response.status()).toBe(400);
-    expect(res.responseBody).toBe('Bad Request');
-  });
+  test(
+    'PUT booking without body',
+    { tag: [Tag.SMOKE_TEST, Tag.REGRESSION_TEST] },
+    async ({ bookingRequests, validHeaders }) => {
+      //Act
+      const res = await bookingRequests.updateBooking(bookingId, undefined, validHeaders);
+      //Assert
+      expect(res.response.status()).toBe(400);
+      expect(res.responseBody).toBe('Bad Request');
+    }
+  );
 });

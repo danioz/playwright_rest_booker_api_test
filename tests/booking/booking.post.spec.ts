@@ -7,8 +7,7 @@ import Tag from 'lib/tag';
 let createdBookings: number[] = [];
 
 test.describe('POST /booking', () => {
-
-  test.afterAll(async () => {
+  test.afterAll(async ({ bookingRequests }) => {
     let validHeaders: RequestHeaders = await createHeaders();
     if (createdBookings) {
       for (const bookingId of createdBookings) {
@@ -18,7 +17,7 @@ test.describe('POST /booking', () => {
     }
   });
 
-  test('POST new booking', { tag: Tag.SMOKE_TEST }, async ({bookingRequests}) => {
+  test('POST new booking', { tag: Tag.SMOKE_TEST }, async ({ bookingRequests }) => {
     //Arrange
     const bookingData: Booking = DataFactory.getBooking();
     //Act
@@ -42,7 +41,7 @@ test.describe('POST /booking', () => {
     });
   });
 
-  test('POST new booking with random data', { tag: Tag.SMOKE_TEST }, async ({bookingRequests}) => {
+  test('POST new booking with random data', { tag: Tag.SMOKE_TEST }, async ({ bookingRequests }) => {
     //Act
     const res = await bookingRequests.createBooking();
     //Assert
