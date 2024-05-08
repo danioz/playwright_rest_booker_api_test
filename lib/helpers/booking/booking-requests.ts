@@ -58,6 +58,19 @@ export class BookingRequests {
       return { response, responseBody };
     });
   }
+
+  async patchBooking(bookingId: number, bookingData: any, headers?: RequestHeaders) {
+    return await test.step(`PATCH booking with body: ${JSON.stringify(bookingData)}`, async () => {
+      const client = await new BookingClient().getClient();
+      const response = await client.patch(endpoints.booking.bookingId(bookingId), {
+        data: bookingData,
+        headers: { ...headers, Accept: 'application/json' },
+      });
+      const responseBody = await getResponseBody(response);
+
+      return { response, responseBody };
+    });
+  }
 }
 
 const getResponseBody = async (response: APIResponse): Promise<any> => {
