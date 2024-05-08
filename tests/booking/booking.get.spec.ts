@@ -39,4 +39,16 @@ test.describe('GET /booking', () => {
     expect(res.response.status()).toBe(404);
     expect(res.responseBody, `Response was: ${JSON.stringify(res.responseBody)}`).toBe('Not Found');
   });
+
+  const bookingIds = [0, 99999, -1];
+  for (const bookingId of bookingIds) {
+    test(`GET booking with parametrized id: ${bookingId}`, { tag: Tag.SMOKE_TEST }, async ({ bookingRequests }) => {
+      //Act
+      const res = await bookingRequests.getBookingById(bookingId);
+
+      //Assert
+      expect(res.response.status()).toBe(404);
+      expect(res.responseBody, `Response was: ${JSON.stringify(res.responseBody)}`).toBe('Not Found');
+    });
+  }
 });
